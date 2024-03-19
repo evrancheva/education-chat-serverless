@@ -9,6 +9,6 @@
   to = "/.netlify/functions/api/:splat"
 
 [[headers]]
-  for = "/*"
-[headers.values]
-  Access-Control-Allow-Origin = "*"
+  for = "*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
