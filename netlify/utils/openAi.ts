@@ -8,7 +8,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_APIKEY || "",
 });
 
-async function handleUserQuestion(req: Request, res: Response) {
+async function handleQuestion(req: Request, res: Response) {
   const chatCompletion = await openai.chat.completions.create({
     messages: [{ role: "user", content: req.query.q as string }],
     model: "gpt-3.5-turbo",
@@ -19,4 +19,4 @@ async function handleUserQuestion(req: Request, res: Response) {
   res.json({ message: text });
 }
 
-export default handleUserQuestion;
+export default handleQuestion;
