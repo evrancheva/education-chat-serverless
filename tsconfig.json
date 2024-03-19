@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2017", // Target ECMAScript version
+    "module": "CommonJS", // Module system to use
+    "strict": true, // Enable all strict type-checking options
+    "esModuleInterop": true, // Allows compatibility between CommonJS and ES Modules
+    "outDir": "./functions/dist", // Output directory for compiled files
+    "baseUrl": "./", // Base URL for module resolution
+    "paths": {
+      "*": ["./node_modules/*", "./functions/*"]
+    },
+    "types": ["node"] // Type declaration files to include
+  }
+}
