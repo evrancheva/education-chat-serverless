@@ -8,26 +8,31 @@ const openai = new OpenAI({
 const handler: Handler = async (event, context) => {
   try {
     // Check if the request method is GET
-    if (event.httpMethod !== "GET") {
+    if (event.httpMethod !== "POST") {
       return {
         statusCode: 405,
         body: JSON.stringify({ message: "Method Not Allowed" }),
       };
     }
 
-    // Get the query parameter from the URL
-    const { q } = event.queryStringParameters || {};
-    if (!q) {
+    // Parse the request body as JSON
+    const requestBody = JSON.parse(event.body || "");
+    const { messages } = requestBody;
+
+    if (!messages || !Array.isArray(messages)) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ message: "Missing queryParam" }),
+        body: JSON.stringify({ message: "Invalid request body" }),
       };
     }
 
+    // Call OpenAI's completions.create method with the provided messages
     const response = await openai.chat.completions.create({
-      messages: [{ role: "user", content: q }],
+      messages,
       model: "gpt-3.5-turbo",
+      temperature: 1,
     });
+
     const text = response.choices[0].message.content;
     // Return the response from OpenAI
     return {
@@ -36,7 +41,7 @@ const handler: Handler = async (event, context) => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Methods": "POST",
         "Access-Control-Allow-Headers": "Content-Type",
       },
     };
