@@ -16,10 +16,9 @@ const handler: Handler = async (event, context) => {
     }
 
     // Parse the request body as JSON
-    const requestBody = JSON.parse(event.body || "");
-    const { messages } = requestBody;
+    const messageHistory = JSON.parse(event.body || "");
 
-    if (!messages || !Array.isArray(messages)) {
+    if (!messageHistory || !Array.isArray(messageHistory)) {
       return {
         statusCode: 400,
         body: JSON.stringify({ message: "Invalid request body" }),
@@ -28,7 +27,7 @@ const handler: Handler = async (event, context) => {
 
     // Call OpenAI's completions.create method with the provided messages
     const response = await openai.chat.completions.create({
-      messages,
+      messages: messageHistory,
       model: "gpt-3.5-turbo",
       temperature: 1,
     });
