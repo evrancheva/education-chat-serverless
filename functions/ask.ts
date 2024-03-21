@@ -1,13 +1,26 @@
-import { Handler } from "@netlify/functions";
+import { Handler, HandlerResponse } from "@netlify/functions";
 import { OpenAI } from "openai";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_APIKEY || "",
 });
 
-const handler: Handler = async (event, context) => {
+const handler: Handler = async (event, context): Promise<HandlerResponse> => {
   try {
-    // Check if the request method is GET
+    // Handle preflight OPTIONS request
+    if (event.httpMethod === "OPTIONS") {
+      return {
+        statusCode: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Methods": "POST",
+        },
+        body: JSON.stringify({ message: "Preflight request successful" }),
+      };
+    }
+
+    // Handle actual POST request
     if (event.httpMethod !== "POST") {
       return {
         statusCode: 405,
@@ -41,7 +54,6 @@ const handler: Handler = async (event, context) => {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
       },
     };
   } catch (error) {
