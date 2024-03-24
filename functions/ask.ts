@@ -20,7 +20,7 @@ const handler: Handler = async (event, context): Promise<HandlerResponse> => {
       };
     }
 
-    // Handle actual POST request
+    // Ignore request if it's not POST
     if (event.httpMethod !== "POST") {
       return {
         statusCode: 405,
