@@ -41,7 +41,7 @@ const handler: Handler = async (event, context): Promise<HandlerResponse> => {
     // Call OpenAI's completions.create method with the provided messages
     const response = await openai.chat.completions.create({
       messages: messageHistory,
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
       temperature: 1,
     });
 
