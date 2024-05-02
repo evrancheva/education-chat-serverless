@@ -41,7 +41,7 @@ const handler: Handler = async (event, context): Promise<HandlerResponse> => {
     // Call OpenAI's completions.create method with the provided messages
     const response = await openai.chat.completions.create({
       messages: messageHistory,
-      model: "gpt-4-turbo",
+      model: "gpt-3.5-turbo",
       temperature: 1,
     });
 
@@ -57,10 +57,21 @@ const handler: Handler = async (event, context): Promise<HandlerResponse> => {
       },
     };
   } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ message: "Internal Server Error" }),
-    };
+    if (error.response && error.response.status === 502) {
+      // Handle 502 Bad Gateway error
+      console.error("502 Bad Gateway error occurred:", error.response.data);
+      return {
+        statusCode: 502,
+        body: JSON.stringify({ message: "502 Bad Gateway Error from OpenAI" }),
+      };
+    } else {
+      // Handle other errors
+      console.error("An error occurred:", error);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ message: "Internal Server Error" }),
+      };
+    }
   }
 };
 
