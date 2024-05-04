@@ -13,10 +13,8 @@ const handler: Handler = async (event, context): Promise<HandlerResponse> => {
         statusCode: 200,
         headers: {
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": "true",
-          "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
-          "Access-Control-Allow-Headers":
-            "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Methods": "POST",
         },
         body: JSON.stringify({ message: "Preflight request successful" }),
       };
@@ -53,9 +51,7 @@ const handler: Handler = async (event, context): Promise<HandlerResponse> => {
       statusCode: 200,
       body: JSON.stringify({ response: text }),
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Content-Type": "application/json",
       },
     };
   } catch (error) {
